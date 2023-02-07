@@ -1,0 +1,16 @@
+<launch>
+
+  <!-- Arguments -->
+  <arg name="lang" default="ko" />
+  <arg name="frame" default="5" />
+  <!-- Params -->
+  <param name="lang" value="$(arg lang)" />
+  <param name="frame" type="int" value="$(arg frame)" />
+
+  <!-- Start the Joint Trajectory Action Server -->
+  <node name="nemo_node" 
+    pkg="nemo_asr"
+    type="nemo_node.py" 
+    output="screen"
+    required="true" />
+</launch>

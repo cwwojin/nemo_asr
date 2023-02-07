@@ -1,0 +1,6 @@
+Cython
+wget
+text-unidecode
+pyaudio
+sounddevice
+soundfile
