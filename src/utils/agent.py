@@ -8,8 +8,10 @@ from std_msgs.msg import String
 
 RATE = 16000
 CHANNELS = 1
-MODEL_KO = "cwwojin/stt_kr_conformer_ctc_small_20"
-MODEL_EN = "stt_en_conformer_ctc_small"
+MODEL_NAME = {
+    'ko':"cwwojin/stt_kr_conformer_ctc_small_20",
+    'en':"stt_en_conformer_ctc_small",
+}
 
 class NemoAgent(object):
     """Speech Recognize using Nvidia NeMo"""
@@ -26,12 +28,11 @@ class NemoAgent(object):
         #config
         self.lang = lang
         self.frame = frame
-        if lang == 'ko' :
-            self.model_name = MODEL_KO
-        elif lang == 'en' :
-            self.model_name = MODEL_EN
-        else :
-            raise ValueError("supported languages : en, ko")
+        try :
+            self.model_name = MODEL_NAME[lang]
+        except KeyError :
+            rospy.loginfo(f"unknown language {lang} (supported languages : en, ko)")
+
         
         #load model from HuggingFace
         self.model = nemo_asr.models.ASRModel.from_pretrained(model_name=self.model_name, map_location=device)

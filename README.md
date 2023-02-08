@@ -31,5 +31,7 @@ $ roslaunch nemo_asr nemo_asr.launch \
     lang:=ko \
     frame:=5
 ``` 
+- lang : {"en", "ko"}
+- frame : time(sec) to record each voice command
 ## Author
 - Woojin Choi / cwwojin@kaist.ac.kr
