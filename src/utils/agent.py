@@ -65,10 +65,10 @@ class NemoAgent(object):
             rospy.loginfo("nemo-recognizer already stopped!")
 
     def record(self):
-        rospy.loginfo("Start to record the audio.")
+        rospy.loginfo("Recording audio..")
         mydata = sd.rec(int(RATE * self.frame),blocking=True)
         sf.write(self.audio_path, mydata, RATE)
-        rospy.loginfo("recording done.")
+        # rospy.loginfo("recording done.")
 
     def transcribe(self):
         #transcribe ONE file
