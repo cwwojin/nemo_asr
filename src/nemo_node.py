@@ -8,7 +8,8 @@ from utils.agent import NemoAgent
 def main() :
     lang = rosparam.get_param('lang')
     frame = rosparam.get_param('frame')
-    agent = NemoAgent(lang, frame, device="cuda" if torch.cuda.is_available() else "cpu")
+    topic = rosparam.get_param('speech_channel')
+    agent = NemoAgent(lang, frame, device="cuda" if torch.cuda.is_available() else "cpu", topic=topic)
     agent.recognize_speech()
     #rospy.spin()
 

@@ -16,7 +16,7 @@ MODEL_NAME = {
 
 class NemoAgent(object):
     """Speech Recognize using Nvidia NeMo"""
-    def __init__(self, lang, frame, device="cpu"):
+    def __init__(self, lang, frame, device="cpu", topic="speech_recognition"):
         #set sounddevice defaults
         sd.default.samplerate = RATE
         sd.default.channels = CHANNELS
@@ -24,7 +24,7 @@ class NemoAgent(object):
         #start ROS node
         rospy.init_node('nemo_node')
         rospy.on_shutdown(self.shutdown)
-        self.pub = rospy.Publisher('asr_result', String, queue_size=10)
+        self.pub = rospy.Publisher(topic, String, queue_size=10)
         
         #config
         self.lang = lang
