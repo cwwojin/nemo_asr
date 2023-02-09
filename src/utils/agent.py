@@ -87,7 +87,7 @@ class NemoAgent(object):
             #get keyboard input
             command = None
             while command not in self.inputs :
-                print("[y/n] 'y' to record / 'n' for shutdown.")
+                print(f"[y/n] 'y' to record for {self.frame} seconds / 'n' for shutdown")
                 command = str(input())
             if command == 'y' :
                 self.record()

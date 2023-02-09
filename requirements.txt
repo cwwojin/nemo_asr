@@ -1,3 +1,4 @@
+rospkg
 Cython
 wget
 text-unidecode

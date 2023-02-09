@@ -9,10 +9,16 @@
   <param name="frame" type="int" value="$(arg frame)" />
   <param name="speech_channel" value="$(arg speech_channel)" />
 
-  <!-- Start the ASR node -->
+  <!-- Start the nodes -->
   <node name="nemo_node" 
     pkg="nemo_asr"
     type="nemo_node.py" 
     output="screen"
     required="true" />
+  <node name="listener" 
+    pkg="nemo_asr"
+    type="listener.py" 
+    output="screen"
+    required="true" />
+
 </launch>
