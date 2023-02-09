@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import sounddevice as sd
 import soundfile as sf
@@ -47,7 +48,7 @@ class NemoAgent(object):
 
         #start
         self.start()
-        self.recognize_speech()
+        #self.recognize_speech()
 
     def start(self):
         if not self.streaming :
@@ -98,6 +99,7 @@ class NemoAgent(object):
                 break
             else :
                 raise ValueError(f"invalid command : {command}")
+
     
 
 
