@@ -44,7 +44,7 @@ class NemoAgent(object):
 
         #On / Off
         self.streaming = False
-        self.inputs = ['y','n']
+        self.inputs = ['y','n','c']
 
         #start
         self.start()
@@ -87,7 +87,7 @@ class NemoAgent(object):
             #get keyboard input
             command = None
             while command not in self.inputs :
-                print(f"[y/n] 'y' to record for {self.frame} seconds / 'n' for shutdown")
+                print(f"[INPUT] 'y' : record for {self.frame} seconds / 'c' : cli input / 'n' : shutdown")
                 command = str(input())
             if command == 'y' :
                 self.record()
@@ -95,6 +95,10 @@ class NemoAgent(object):
                 #publish result
                 self.pub.publish(String(result))
                 rospy.loginfo(f"Transcription : {result}")
+            elif command == 'c' :
+                result = input("command: ")
+                self.pub.publish(String(result))
+                rospy.loginfo(f"CLI-input : {result}")
             elif command == 'n' :
                 break
             else :
