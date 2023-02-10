@@ -5,7 +5,7 @@
 - /nemo_node : node for ASR
 - exit : type 'n' for shutdown of the node.
 ## Publishing Topics
-- /asr_result : (String) Speech recognition result
+- /speech_recognition : (String) Speech recognition result
 ## Using Pre-trained NeMo models
 * Currently, English and Korean is supported.
 * To change the model, edit "src/utils/agent.py"
@@ -29,9 +29,11 @@ $ pip install nemo_toolkit[all]
 ```shell
 $ roslaunch nemo_asr nemo_asr.launch \
     lang:=ko \
-    frame:=5
+    frame:=5 \
+    speech_channel:=speech_recognition
 ``` 
 - lang : {"en", "ko"}
 - frame : time(sec) to record each voice command
+- speech_channel : topic name
 ## Author
 - Woojin Choi / cwwojin@kaist.ac.kr
