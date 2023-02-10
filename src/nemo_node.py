@@ -11,14 +11,9 @@ def main() :
     topic = rosparam.get_param('speech_channel')
     agent = NemoAgent(lang, frame, device="cuda" if torch.cuda.is_available() else "cpu", topic=topic)
     agent.recognize_speech()
-    #rospy.spin()
 
 if __name__ == '__main__':
     try:
         main()
     except rospy.ROSInterruptException :
         pass
-    # except (KeyboardInterrupt, rospy.ROSInterruptException) as e:
-    #     rospy.logfatal("Stopping nemo-node...")
-    #     rospy.sleep(1)
-    #     print("node terminated")

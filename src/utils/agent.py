@@ -9,6 +9,7 @@ from std_msgs.msg import String
 
 RATE = 16000
 CHANNELS = 1
+# Change model name & languages here.
 MODEL_NAME = {
     'ko':"cwwojin/stt_kr_conformer_ctc_small_20",
     'en':"stt_en_conformer_ctc_small",
@@ -66,7 +67,7 @@ class NemoAgent(object):
         while not rospy.is_shutdown() :
             #get keyboard input
             command = str(input(f"[INPUT] 'y' : record for {self.frame} seconds / 'c' : cli input / 'n' : shutdown  "))
-            
+
             if command == 'y' :
                 self.record()
                 result = self.transcribe()
@@ -79,7 +80,3 @@ class NemoAgent(object):
             elif command == 'n' :
                 break
             rate.sleep()
-
-    
-
-
