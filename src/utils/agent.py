@@ -33,7 +33,6 @@ class NemoAgent(object):
             self.model_name = MODEL_NAME[lang]
         except KeyError :
             rospy.loginfo(f"unknown language {lang} (supported languages : en, ko)")
-
         
         #load model from HuggingFace
         self.model = nemo_asr.models.ASRModel.from_pretrained(model_name=self.model_name, map_location=device)
@@ -42,27 +41,8 @@ class NemoAgent(object):
         #audio path
         self.audio_path = "out.wav"
 
-        #On / Off
-        self.streaming = False
+        #inputs
         self.inputs = ['y','n','c']
-
-        #start
-        self.start()
-        #self.recognize_speech()
-
-    def start(self):
-        if not self.streaming :
-            self.streaming = True
-            rospy.loginfo("nemo-recognizer started.")
-        else :
-            rospy.loginfo("nemo-recognizer already running!")
-    
-    def stop(self):
-        if self.streaming :
-            self.streaming = False
-            rospy.loginfo("nemo-recognizer stopped.")
-        else :
-            rospy.loginfo("nemo-recognizer already stopped!")
 
     def record(self):
         rospy.loginfo("Recording audio..")
@@ -75,24 +55,21 @@ class NemoAgent(object):
         return self.model.transcribe([self.audio_path])[0]
 
     def shutdown(self):
-        self.stop()
+        #self.stop()
         if os.path.isfile(self.audio_path) :
             os.remove(self.audio_path)
         rospy.loginfo("nemo-recognizer shutdown..")
         
-    
     def recognize_speech(self):
-        # MAIN LOOP : get keyboard input to start recording
-        while self.streaming :
+        rate = rospy.Rate(6)
+
+        while not rospy.is_shutdown() :
             #get keyboard input
-            command = None
-            while command not in self.inputs :
-                print(f"[INPUT] 'y' : record for {self.frame} seconds / 'c' : cli input / 'n' : shutdown")
-                command = str(input())
+            command = str(input(f"[INPUT] 'y' : record for {self.frame} seconds / 'c' : cli input / 'n' : shutdown  "))
+            
             if command == 'y' :
                 self.record()
                 result = self.transcribe()
-                #publish result
                 self.pub.publish(String(result))
                 rospy.loginfo(f"Transcription : {result}")
             elif command == 'c' :
@@ -101,8 +78,7 @@ class NemoAgent(object):
                 rospy.loginfo(f"CLI-input : {result}")
             elif command == 'n' :
                 break
-            else :
-                raise ValueError(f"invalid command : {command}")
+            rate.sleep()
 
     
 
