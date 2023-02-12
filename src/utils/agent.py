@@ -63,6 +63,7 @@ class NemoAgent(object):
         
     def recognize_speech(self):
         rate = rospy.Rate(6)
+        rospy.sleep(5.0)
 
         while not rospy.is_shutdown() :
             #get keyboard input
