@@ -34,9 +34,10 @@ $ roslaunch nemo_asr nemo_asr.launch \
 - speech_channel : topic name
 ## Interface
 ```shell
-[INPUT] 'y' : record for 5 seconds / 'c' : cli input / 'n' : shutdown  
+[INPUT] 'y' : record for 5 seconds / 'l' : language / 'c' : cli input / 'n' : shutdown  
 ``` 
 - press 'c' to enable command-line input (instead of STT)
+- press 'l' to change language
 # 4. Pre-trained ASR models
 - this package currently uses Conformer-CTC models - https://arxiv.org/abs/2005.08100
 ### Changing models / languages

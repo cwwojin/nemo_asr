@@ -11,8 +11,10 @@ RATE = 16000
 CHANNELS = 1
 # Change model name & languages here.
 MODEL_NAME = {
-    'ko':"cwwojin/stt_kr_conformer_ctc_small_20",
-    'en':"stt_en_conformer_ctc_small",
+    # 'ko':"cwwojin/stt_kr_conformer_ctc_small_20",
+    'ko':"cwwojin/stt_kr_conformer_ctc_medium",
+    # 'en':"stt_en_conformer_ctc_small",
+    'en':"stt_en_conformer_ctc_medium",
 }
 
 class NemoAgent(object):
@@ -28,12 +30,13 @@ class NemoAgent(object):
         self.pub = rospy.Publisher(topic, String, queue_size=10)
         
         #config
+        self.device = device
         self.lang = lang
         self.frame = frame
         try :
             self.model_name = MODEL_NAME[lang]
         except KeyError :
-            rospy.loginfo(f"unknown language {lang} (supported languages : en, ko)")
+            rospy.loginfo(f"unsupported language : {lang} (supported languages : en, ko)")
         
         #load model from HuggingFace
         self.model = nemo_asr.models.ASRModel.from_pretrained(model_name=self.model_name, map_location=device)
@@ -41,9 +44,6 @@ class NemoAgent(object):
 
         #audio path
         self.audio_path = "out.wav"
-
-        #inputs
-        self.inputs = ['y','n','c']
 
     def record(self):
         rospy.loginfo("Recording audio..")
@@ -60,14 +60,27 @@ class NemoAgent(object):
         if os.path.isfile(self.audio_path) :
             os.remove(self.audio_path)
         rospy.loginfo("nemo-recognizer shutdown..")
+
+    def change_language(self,lang):
+        # change language
+        if not lang==self.lang :
+            rospy.loginfo(f"change language from {self.lang} to {lang}..")
+            del self.model
+            self.lang = lang
+            self.model_name = MODEL_NAME[lang]
+            #load model from HuggingFace
+            self.model = nemo_asr.models.ASRModel.from_pretrained(model_name=self.model_name, map_location=self.device)
+            self.model.eval();
+        else :
+            rospy.loginfo(f"current language is already {lang}!")
         
     def recognize_speech(self):
         rate = rospy.Rate(6)
-        rospy.sleep(5.0)
+        #rospy.sleep(5.0)
 
         while not rospy.is_shutdown() :
             #get keyboard input
-            command = str(input(f"[INPUT] 'y' : record for {self.frame} seconds / 'c' : cli input / 'n' : shutdown  "))
+            command = str(input(f"[INPUT] 'y' : record for {self.frame} seconds / 'l' : language / 'c' : cli-input / 'n' : shutdown  "))
 
             if command == 'y' :
                 self.record()
@@ -80,4 +93,10 @@ class NemoAgent(object):
                 rospy.loginfo(f"CLI-input : {result}")
             elif command == 'n' :
                 break
+            elif command == 'l' :
+                new_lang = input("change language to : ")
+                if new_lang in MODEL_NAME :
+                    self.change_language(new_lang)
+                else :
+                    rospy.loginfo(f"unsupported language : {new_lang}")
             rate.sleep()
